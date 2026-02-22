@@ -24,7 +24,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          curl -LO --output-dir cache https://github.com/fcitx-contrib/fcitx5-js/releases/download/${{ github.inputs.testing == true && 'testing' || 'latest' }}/fcitx5-js.tgz
+          curl -LO --output-dir cache https://github.com/fcitx-contrib/fcitx5-js/releases/download/${{ inputs.testing == true && 'testing' || 'latest' }}/fcitx5-js.tgz
           curl -LO --output-dir cache https://github.com/fcitx-contrib/fcitx5-config-vue/releases/download/latest/fcitx5-config-vue.tgz
           npm i -g pnpm
           pnpm i
@@ -70,7 +70,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          curl -LO --output-dir cache https://github.com/fcitx-contrib/fcitx5-js/releases/download/${{ github.inputs.testing == true && 'testing' || 'latest' }}/fcitx5-js.tgz
+          curl -LO --output-dir cache https://github.com/fcitx-contrib/fcitx5-js/releases/download/${{ inputs.testing == true && 'testing' || 'latest' }}/fcitx5-js.tgz
           curl -LO --output-dir cache https://github.com/fcitx-contrib/fcitx5-config-vue/releases/download/latest/fcitx5-config-vue.tgz
           npm i -g pnpm
           pnpm i
@@ -82,7 +82,7 @@ jobs:
           pnpm run test
 
   release:
-    if: ${{ github.ref == 'refs/heads/master' || github.inputs.testing == true }}
+    if: ${{ github.ref == 'refs/heads/master' || inputs.testing == true }}
     needs: test
     runs-on: ubuntu-24.04
     steps:
@@ -100,14 +100,14 @@ jobs:
         uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          automatic_release_tag: ${{ github.inputs.testing == true && 'testing' || 'latest' }}
+          automatic_release_tag: ${{ inputs.testing == true && 'testing' || 'latest' }}
           prerelease: true
-          title: ${{ github.inputs.testing == true && 'Testing Build' || 'Nightly Build' }}
+          title: ${{ inputs.testing == true && 'Testing Build' || 'Nightly Build' }}
           files: |
             fcitx5-online.zip
 
       - name: Delete testing release
-        if: ${{ github.inputs.testing != true }}
+        if: ${{ inputs.testing != true }}
         run: gh release delete testing --yes || true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
