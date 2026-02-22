@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       testing:
-        description: 'Use fcitx5-js testing release'
+        description: Use fcitx5-js testing release
         type: boolean
         default: false
 
